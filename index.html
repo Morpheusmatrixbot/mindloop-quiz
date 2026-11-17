@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindLoop · 60-Second Focus Leak Quiz</title>
+  <style>
+    :root {
+      --bg: #FAF8F3;
+      --card: #FFFFFF;
+      --ink: #1A1D24;
+      --muted: #64748B;
+      --orange: #F97316;
+      --orange-dark: #EA580C;
+      --blue: #2563EB;
+      --green: #16A34A;
+      --border: #E2DCD0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(#e5dfd3 1.5px, transparent 1.5px), var(--bg);
+      background-size: 28px 28px;
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 16px 56px;
+    }
+    .container {
+      width: 100%;
+      max-width: 680px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      font-size: 14px;
+      padding: 8px 14px;
+      background: var(--ink);
+      color: #fff;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+    .brand span.dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--orange);
+      display: inline-block;
+    }
+    .card {
+      background: var(--card);
+      border: 3px solid var(--ink);
+      border-radius: 22px;
+      padding: 30px 28px;
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4vw, 34px);
+      line-height: 1.15;
+    }
+    p.lead {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .progress-wrap {
+      height: 10px;
+      background: #ECE7DC;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 22px;
+      border: 1.5px solid var(--ink);
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--orange);
+      transition: width 0.3s ease;
+    }
+    .q-meta {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--orange-dark);
+      margin-bottom: 8px;
+    }
+    .q-title {
+      font-size: 21px;
+      font-weight: 800;
+      margin: 0 0 18px;
+      line-height: 1.3;
+    }
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+    .opt-btn {
+      text-align: left;
+      width: 100%;
+      padding: 16px 18px;
+      font-size: 15.5px;
+      font-weight: 600;
+      color: var(--ink);
+      background: #FAF9F6;
+      border: 2.5px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .opt-btn:hover {
+      border-color: var(--ink);
+      background: #FFF7ED;
+      transform: translateY(-1px);
+    }
+    .disclosure {
+      background: #FFFBEB;
+      border: 2px solid #F59E0B;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 13.5px;
+      line-height: 1.45;
+      color: #78350F;
+      margin-bottom: 20px;
+    }
+    .badge-type {
+      display: inline-block;
+      background: #FFF7ED;
+      color: var(--orange-dark);
+      border: 2px solid var(--orange);
+      font-weight: 800;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .steps {
+      margin: 18px 0 22px;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+    .steps li {
+      background: #F8FAFC;
+      border: 2px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+    .tool-box {
+      background: #F0F9FF;
+      border: 2.5px solid var(--blue);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 16px;
+    }
+    .tool-box h3 {
+      margin: 0 0 6px;
+      font-size: 19px;
+    }
+    .tool-box p {
+      margin: 0 0 14px;
+      font-size: 14.5px;
+      color: #334155;
+      line-height: 1.45;
+    }
+    .cta-btn {
+      display: inline-block;
+      text-decoration: none;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      border: 2.5px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      cursor: pointer;
+      transition: transform 0.12s ease;
+    }
+    .cta-btn:hover {
+      background: var(--orange-dark);
+      transform: translate(-1px, -1px);
+    }
+    .reset-btn {
+      margin-top: 18px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 14px;
+    }
+    .hidden { display: none; }
+    footer {
+      margin-top: 18px;
+      font-size: 12.5px;
+      color: var(--muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="brand"><span class="dot"></span> MINDLOOP · FOCUS DIAGNOSTIC</div>
+
+    <div class="card">
+      <div id="intro-view">
+        <h1>What's Secretly Hijacking Your Focus?</h1>
+        <p class="lead">Answer 5 quick questions (under 60 seconds) to uncover your exact cognitive stall loop—plus a science-backed protocol and the lightest tool stack for how your brain works.</p>
+        <button class="cta-btn" onclick="startQuiz()">Start the 60-Second Audit →</button>
+      </div>
+
+      <div id="quiz-view" class="hidden">
+        <div class="progress-wrap"><div class="progress-fill" id="prog"></div></div>
+        <div class="q-meta" id="q-meta">Question 1 of 5</div>
+        <h2 class="q-title" id="q-title"></h2>
+        <div class="options" id="options"></div>
+      </div>
+
+      <div id="result-view" class="hidden">
+        <div class="disclosure" id="disclosure-box">
+          <strong>Affiliate Disclosure:</strong> I earn a commission if you sign up or buy through the recommended links below, at no extra cost to you. Every recommendation is matched to your quiz answers.
+        </div>
+        <div class="badge-type" id="res-badge"></div>
+        <h1 id="res-title"></h1>
+        <p class="lead" id="res-summary"></p>
+        <strong>Your 3-Step Reset Protocol:</strong>
+        <ul class="steps" id="res-steps"></ul>
+
+        <div class="tool-box">
+          <h3 id="tool-title"></h3>
+          <p id="tool-desc"></p>
+          <a class="cta-btn" id="tool-link" href="#" target="_blank" rel="noopener noreferrer sponsored">Open Recommended Tool →</a>
+        </div>
+
+        <button class="reset-btn" onclick="resetQuiz()">Retake the Quiz</button>
+      </div>
+    </div>
+
+    <footer>MindLoop Educational Resource · Backed by published behavioral science (Sirois & Pychyl 2013; Oettingen 2011; Ward 2017)</footer>
+  </div>
+
+  <script>
+    const DEFAULT_LINKS = {
+      disclosure: "Affiliate Disclosure: I earn a commission if you sign up or buy through recommended tool or program links below, at no extra cost to you. Every recommendation is matched to your quiz answers.",
+      tools: {
+        switcher: {
+          title: "Recommended Setup: Freedom (Cross-Device Distraction Blocker)",
+          desc: "Locks distracting websites and apps simultaneously on desktop and phone so willpower isn't wasted fighting impulse clicks.",
+          cta: "Open Freedom Blocker →",
+          url: "https://freedom.to/"
+        },
+        overplanner: {
+          title: "Recommended Setup: Motion (AI Time-Blocking Calendar)",
+          desc: "Automatically schedules tasks into realistic open hours on your calendar and warns you the moment your day is overbooked.",
+          cta: "Open Motion Calendar →",
+          url: "https://www.usemotion.com/"
+        },
+        mood_dodger: {
+          title: "Recommended Setup: Todoist (Ultra-Light 2-Min Capture)",
+          desc: "Keep today's view down to just 1–3 tiny next actions so your brain doesn't panic at a wall of overdue projects.",
+          cta: "Open Todoist →",
+          url: "https://todoist.com/"
+        },
+        daydreamer: {
+          title: "Recommended Setup: Focus & Habit Reset System",
+          desc: "Pair your daily target with concrete obstacles and WOOP if-then triggers so planning turns into shipped output.",
+          cta: "Get the Reset System →",
+          url: "https://www.notion.so/"
+        }
+      }
+    };
+
+    let liveConfig = DEFAULT_LINKS;
+    fetch("./links.json?v=" + Date.now())
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data && data.tools) liveConfig = data;
+      })
+      .catch(() => {});
+
+    const QUESTIONS = [
+      {
+        q: "When you sit down to tackle an important but unclear task, what happens in the first 10 minutes?",
+        opts: [
+          { text: "I suddenly feel tense or overwhelmed, and open YouTube, news, or email instead.", type: "mood_dodger" },
+          { text: "I spend 45 minutes rearranging my to-do list or calendar so it feels organized.", type: "overplanner" },
+          { text: "I check my phone 'just for a second'—and lose 20+ minutes switching tabs.", type: "switcher" },
+          { text: "I get excited imagining the finished outcome, research endlessly, then run out of steam.", type: "daydreamer" }
+        ]
+      },
+      {
+        q: "Where does your phone usually sit while you work?",
+        opts: [
+          { text: "Right next to my keyboard or mouse, screen up or face down.", type: "switcher" },
+          { text: "In my pocket—I check it whenever a tough thought comes up.", type: "mood_dodger" },
+          { text: "Nearby while I watch productivity or planning videos.", type: "daydreamer" },
+          { text: "Next to me while I tweak productivity apps and schedules.", type: "overplanner" }
+        ]
+      },
+      {
+        q: "Which mistake ruins your daily plan most often?",
+        opts: [
+          { text: "Putting 12 big tasks on today's list, finishing 2, and feeling defeated by 4 PM.", type: "overplanner" },
+          { text: "Avoiding the one high-stakes task until late at night.", type: "mood_dodger" },
+          { text: "Too many browser tabs and notifications breaking my flow.", type: "switcher" },
+          { text: "Planning huge 90-day goals without defining the ugly first step.", type: "daydreamer" }
+        ]
+      },
+      {
+        q: "At the end of a slow day, how do you feel?",
+        opts: [
+          { text: "Mentally fried from jumping between tabs and messages all day.", type: "switcher" },
+          { text: "Guilty because I waited until the last hour to actually start.", type: "mood_dodger" },
+          { text: "Busy all day tweaking systems, yet nothing real shipped.", type: "overplanner" },
+          { text: "Inspired while planning, strangely drained when it's time to execute.", type: "daydreamer" }
+        ]
+      },
+      {
+        q: "What kind of fix would help you most tomorrow morning?",
+        opts: [
+          { text: "Physically locking out distracting sites and apps for 60 minutes.", type: "switcher" },
+          { text: "A calendar that schedules realistic blocks for me so I stop overbooking.", type: "overplanner" },
+          { text: "A super fast 10-second capture box that breaks tasks into tiny 2-minute steps.", type: "mood_dodger" },
+          { text: "One simple system that pairs goals with daily obstacles and if-then rules.", type: "daydreamer" }
+        ]
+      }
+    ];
+
+    const PROFILES = {
+      mood_dodger: {
+        badge: "ARCHETYPE #1 · MOOD DODGER",
+        title: "Your Bottleneck: Emotional Friction",
+        summary: "Like Sirois & Pychyl (2013) found, you aren't lazy—your brain treats uncomfortable, ambiguous tasks like a threat and hits quick-relief distractions to protect your mood.",
+        steps: [
+          "1. Shrink the start: commit only to a 2-minute ugly draft (3 messy bullets).",
+          "2. Separate capture from doing: stop staring at a giant intimidating backlog.",
+          "3. Name the feeling ('this feels unclear') before reaching for a new tab."
+        ]
+      },
+      switcher: {
+        badge: "ARCHETYPE #2 · TAB SWITCHER",
+        title: "Your Bottleneck: The 23-Minute Refocus Tax",
+        summary: "Your working memory is getting shredded by micro-interruptions (Gloria Mark) and nearby-phone brain drain (Ward et al., 2017).",
+        steps: [
+          "1. Put your phone in a completely different room for your first 45-minute block.",
+          "2. Close all messaging & social tabs before opening your main document.",
+          "3. Batch quick checks into two 15-minute windows instead of constant grazing."
+        ]
+      },
+      overplanner: {
+        badge: "ARCHETYPE #3 · OVERPLANNER",
+        title: "Your Bottleneck: The Planning Fallacy",
+        summary: "Just like the students in Buehler, Griffin & Ross (1994), your brain chronically underestimates task duration—leaving daily checklists broken by mid-afternoon.",
+        steps: [
+          "1. Multiply every time estimate by 1.5x before placing it on your day.",
+          "2. Cap deep-work priorities at 1 anchor task per morning.",
+          "3. Let a real time-blocked schedule enforce physical limits on what fits today."
+        ]
+      },
+      daydreamer: {
+        badge: "ARCHETYPE #4 · DAYDREAM DRIFTER",
+        title: "Your Bottleneck: Fantasy Energy Leakage",
+        summary: "Per Kappes & Oettingen (2011), visualizing big wins without concrete obstacles drops physiological energy—tricking your brain into feeling satisfied before starting.",
+        steps: [
+          "1. Stop consuming passive motivation before your first work block.",
+          "2. Run the WOOP check: Wish → Outcome → Main Obstacle → If-Then Plan.",
+          "3. Track daily shipped output rather than hours spent researching."
+        ]
+      }
+    };
+
+    let step = 0;
+    let scores = { mood_dodger: 0, switcher: 0, overplanner: 0, daydreamer: 0 };
+
+    function startQuiz() {
+      document.getElementById("intro-view").classList.add("hidden");
+      document.getElementById("quiz-view").classList.remove("hidden");
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const qObj = QUESTIONS[step];
+      document.getElementById("q-meta").textContent = `Question ${step + 1} of ${QUESTIONS.length}`;
+      document.getElementById("prog").style.width = `${((step + 1) / QUESTIONS.length) * 100}%`;
+      document.getElementById("q-title").textContent = qObj.q;
+      const box = document.getElementById("options");
+      box.innerHTML = "";
+      qObj.opts.forEach((opt) => {
+        const btn = document.createElement("button");
+        btn.className = "opt-btn";
+        btn.textContent = opt.text;
+        btn.onclick = () => {
+          scores[opt.type] = (scores[opt.type] || 0) + 1;
+          step++;
+          if (step < QUESTIONS.length) renderQuestion();
+          else showResult();
+        };
+        box.appendChild(btn);
+      });
+    }
+
+    function showResult() {
+      document.getElementById("quiz-view").classList.add("hidden");
+      document.getElementById("result-view").classList.remove("hidden");
+
+      const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+      const prof = PROFILES[winner];
+      const toolCfg = (liveConfig.tools && liveConfig.tools[winner]) || DEFAULT_LINKS.tools[winner];
+
+      document.getElementById("disclosure-box").textContent = liveConfig.disclosure || DEFAULT_LINKS.disclosure;
+      document.getElementById("res-badge").textContent = prof.badge;
+      document.getElementById("res-title").textContent = prof.title;
+      document.getElementById("res-summary").textContent = prof.summary;
+
+      const ul = document.getElementById("res-steps");
+      ul.innerHTML = "";
+      prof.steps.forEach((s) => {
+        const li = document.createElement("li");
+        li.textContent = s;
+        ul.appendChild(li);
+      });
+
+      document.getElementById("tool-title").textContent = toolCfg.title;
+      document.getElementById("tool-desc").textContent = toolCfg.desc;
+      const linkEl = document.getElementById("tool-link");
+      linkEl.textContent = toolCfg.cta || "Open Recommended Tool →";
+      linkEl.href = toolCfg.url || "#";
+    }
+
+    function resetQuiz() {
+      step = 0;
+      scores = { mood_dodger: 0, switcher: 0, overplanner: 0, daydreamer: 0 };
+      document.getElementById("result-view").classList.add("hidden");
+      document.getElementById("quiz-view").classList.remove("hidden");
+      renderQuestion();
+    }
+  </script>
+</body>
+</html>

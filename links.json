@@ -1,0 +1,29 @@
+{
+  "disclosure": "Affiliate Disclosure: I earn a commission if you sign up or buy through recommended tool or program links below, at no extra cost to you. Every recommendation is matched to your quiz answers.",
+  "tools": {
+    "switcher": {
+      "title": "Recommended Setup: Freedom (Cross-Device Distraction Blocker)",
+      "desc": "Locks distracting websites and apps simultaneously on desktop and phone so willpower isn't wasted fighting impulse clicks.",
+      "cta": "Open Freedom Blocker →",
+      "url": "https://freedom.to/"
+    },
+    "overplanner": {
+      "title": "Recommended Setup: Motion (AI Time-Blocking Calendar)",
+      "desc": "Automatically schedules tasks into realistic open hours on your calendar and warns you the moment your day is overbooked.",
+      "cta": "Open Motion Calendar →",
+      "url": "https://www.usemotion.com/"
+    },
+    "mood_dodger": {
+      "title": "Recommended Setup: Todoist (Ultra-Light 2-Min Capture)",
+      "desc": "Keep today's view down to just 1–3 tiny next actions so your brain doesn't panic at a wall of overdue projects.",
+      "cta": "Open Todoist →",
+      "url": "https://todoist.com/"
+    },
+    "daydreamer": {
+      "title": "Recommended Setup: Focus & Habit Reset System",
+      "desc": "Pair your daily target with concrete obstacles and WOOP if-then triggers so planning turns into shipped output.",
+      "cta": "Get the Reset System →",
+      "url": "https://www.notion.so/"
+    }
+  }
+}
